@@ -37,9 +37,9 @@ export default function Form(props) {
           />
         </form>
         <InterviewerList
-          interviewers={interviewers}
           value={interviewer}
           onChange={(id) => setInterviewer(id)}
+          interviewers={interviewers}
         />
       </section>
       <section className="appointment__card-right">
@@ -47,7 +47,7 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={save}>
+          <Button confirm onClick={() => props.onSave(student, interviewer)}>
             Save
           </Button>
         </section>
