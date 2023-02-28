@@ -14,13 +14,18 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 export default function Appointment(props) {
-  const { time, interview, interviewers } = props;
+  const { time, interview, interviewers, id } = props;
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
   const onAdd = () => {
     transition(CREATE);
+  };
+
+  const onEdit = () => {
+    transition(EDIT, { interview });
   };
 
   const save = function (name, interviewer) {
@@ -32,7 +37,7 @@ export default function Appointment(props) {
       interviewer,
     };
     transition(SAVING);
-    props.bookInterview(props.id, interview).then(() => transition(SHOW));
+    props.bookInterview(id, interview).then(() => transition(SHOW));
   };
 
   const deleteAppointment = function () {
@@ -41,7 +46,7 @@ export default function Appointment(props) {
 
   const confirmDeleteAppointment = function () {
     transition(DELETING);
-    props.cancelInterview(props.id).then(() => {
+    props.cancelInterview(id).then(() => {
       transition(EMPTY);
     });
   };
@@ -51,7 +56,7 @@ export default function Appointment(props) {
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={onAdd} />}
       {mode === SHOW && interview && (
-        <Show {...interview} onDelete={deleteAppointment} />
+        <Show {...interview} onDelete={deleteAppointment} onEdit={onEdit} />
       )}
       {mode === CREATE && (
         <Form interviewers={interviewers} onCancel={back} onSave={save} />
@@ -63,6 +68,16 @@ export default function Appointment(props) {
           message="Are you sure you want to delete this appointment?"
           onCancel={back}
           onConfirm={confirmDeleteAppointment}
+        />
+      )}
+      {mode === EDIT && (
+        <Form
+          interviewers={props.interviewers}
+          onCancel={back}
+          onSave={save}
+          name={interview.student}
+          interviewer={interview.interviewer.id}
+          interview={interview}
         />
       )}
     </article>
