@@ -7,6 +7,7 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -15,6 +16,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const { time, interview, interviewers, id } = props;
@@ -28,27 +31,36 @@ export default function Appointment(props) {
     transition(EDIT, { interview });
   };
 
-  const save = function (name, interviewer) {
-    if (!name || !interviewer) {
-      return Promise.reject("Please enter a name for the appointment");
-    }
+  const onCancel = () => {
+    transition(SHOW);
+  };
+
+  function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer,
     };
+
     transition(SAVING);
-    props.bookInterview(id, interview).then(() => transition(SHOW));
-  };
+
+    props
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch((error) => transition(ERROR_SAVE, true));
+  }
 
   const deleteAppointment = function () {
     transition(CONFIRM);
   };
 
   const confirmDeleteAppointment = function () {
-    transition(DELETING);
-    props.cancelInterview(id).then(() => {
-      transition(EMPTY);
-    });
+    transition(DELETING, true);
+    props
+      .cancelInterview(id)
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch((error) => transition(ERROR_DELETE, true));
   };
 
   return (
@@ -72,13 +84,19 @@ export default function Appointment(props) {
       )}
       {mode === EDIT && (
         <Form
-          interviewers={props.interviewers}
-          onCancel={back}
+          interviewers={interviewers}
+          onCancel={onCancel}
           onSave={save}
           name={interview.student}
           interviewer={interview.interviewer.id}
           interview={interview}
         />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error message="Could not save appointment." onClose={back} />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error message="Could not cancel appointment." onClose={back} />
       )}
     </article>
   );
