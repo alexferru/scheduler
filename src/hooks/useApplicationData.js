@@ -85,7 +85,6 @@ export function useApplicationData() {
         appointments: all[1].data,
         interviewers: all[2].data,
       }));
-      console.log("Interviewers:", all[2].data);
     });
   }, []);
 
