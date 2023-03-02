@@ -1,3 +1,4 @@
+// Imports
 import "components/Application.scss";
 import React from "react";
 
@@ -11,7 +12,9 @@ import {
 
 import { useApplicationData } from "hooks/useApplicationData";
 
+// Defines the Application component, which displays the entire scheduler application.
 export default function Application(props) {
+  // Uses the useApplicationData hook to retrieve the state and functions needed to manipulate it.
   const { state, setDay, bookInterview, cancelInterview } =
     useApplicationData();
 
