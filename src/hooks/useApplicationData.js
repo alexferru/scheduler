@@ -127,6 +127,28 @@ export function useApplicationData() {
     });
   }, []);
 
+  useEffect(() => {
+    const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+    socket.onopen = () => {
+      socket.send("ping");
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      if (message.type === SET_INTERVIEW) {
+        const appointments = { ...state.appointments, ...message.appointments };
+        const days = updateSpots(state, appointments, message.id);
+        dispatch({ type: SET_INTERVIEW, value: { appointments, days } });
+      }
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [state]);
+
   return {
     state,
     setDay,
