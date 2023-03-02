@@ -12,11 +12,22 @@ This project is a single page application (SPA) called Interview Scheduler, buil
 
 ## Final Product
 
+### Main View
+
 ![Interview Scheduler](https://github.com/JimHwkins/scheduler/blob/master/docs/Main.png)
+
+### Book Appointment
+
 ![Interview Scheduler - Book interview](https://github.com/JimHwkins/scheduler/blob/master/docs/BookInterview.png)
 ![Interview Scheduler - Saving load](https://github.com/JimHwkins/scheduler/blob/master/docs/Saving.png)
+
+### Cancel Appointment
+
 ![Interview Scheduler - Cancel interview](https://github.com/JimHwkins/scheduler/blob/master/docs/DeleteInterview.png)
 ![Interview Scheduler - Deleting load](https://github.com/JimHwkins/scheduler/blob/master/docs/Deleting.png)
+
+### Error
+
 ![Interview Scheduler - Error](https://github.com/JimHwkins/scheduler/blob/master/docs/Error.png)
 
 ## Technologies used:
